@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta property="og:title" content="Invitation">
-<meta property="og:description" content="You are invited ✨">
 <meta charset="UTF-8">
 <title>Invitation</title>
 
@@ -37,79 +35,73 @@ body {
   cursor: pointer;
 }
 
-/* TAP TEXT */
 .small-text {
   color: white;
   font-family: "F1589_Humane_Bordeaux W00 Normal";
-  font-size: 18px;
   margin-top: 20px;
+  font-size: 18px;
   opacity: 0.8;
 }
 
 /* CARD */
 .card-img {
   width: 850px;
-  margin-bottom: 10px;
 }
 
-/* CLICK IMAGE */
+/* PRINTER */
 .printer-img {
   width: 420px;
   cursor: pointer;
   margin-top: 25px;
 }
 
-/* TICKET */
+/* TICKET (MÁS GRANDE) */
 .ticket {
   width: 770px;
-  margin-top: 25px;
+  margin-top: 60px;
   display: none;
 }
 
 /* ADDRESS */
 .button {
-  padding: 12px 30px;
+  padding: 12px 32px;
   border-radius: 30px;
   background: white;
   color: black;
   text-decoration: none;
   font-size: 18px;
   font-family: "F1589_Humane_Bordeaux W00 Normal";
-  margin-top: 35px;
+  margin-top: 80px;
 }
 
-.button:hover {
-  background: transparent;
-  color: white;
-  border: 2px solid white;
-}
-
-/* COUNTDOWN (más grande) */
+/* COUNTDOWN (más separación + más aire) */
 .countdown {
-  margin-top: 40px;
+  margin-top: 70px;
   color: white;
-  font-size: 42px;
+  font-size: 44px;
   font-family: "F1589_Humane_Bordeaux W00 Normal";
 }
 
-/* FOOTER */
+/* FINAL TEXT */
 .footer-text {
-  margin-top: 25px;
+  margin-top: 60px;
   color: white;
   font-size: 24px;
   font-family: "F1589_Humane_Bordeaux W00 Normal";
 }
 
-/* MUSIC (solo en invitación) */
+/* 🎵 MUSIC CENTRADO */
 .music-controls {
   position: fixed;
-  bottom: 20px;
-  display: none; /* 👈 IMPORTANTE */
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%); /* 👈 CENTRADO PERFECTO */
+  display: none;
   gap: 15px;
 }
 
 .music-btn {
-  padding: 16px 30px;
+  padding: 18px 34px;
   border-radius: 30px;
   font-size: 20px;
   background: transparent;
@@ -159,24 +151,26 @@ body {
 
   <img src="Untitled1420_20260507175041.png" class="card-img">
 
-  <img src="Untitled1427_20260507180932.png" class="printer-img" onclick="showTicket()">
+  <img src="Untitled1427_20260507180932.png" class="printer-img" onclick="printTicket()">
 
+  <!-- TICKET -->
   <img src="Untitled1426_20260507181354.png" class="ticket" id="ticket">
 
-  <!-- address (aparece con ticket también) -->
+  <!-- ADDRESS -->
   <a class="button hidden" id="address"
      href="https://maps.app.goo.gl/vbqbLUkQrp8ppB4K6?g_st=ic" target="_blank">
     Address
   </a>
 
-  <!-- countdown -->
-  <div class="countdown" id="countdown"></div>
+  <!-- COUNTDOWN -->
+  <div class="countdown hidden" id="countdown"></div>
 
+  <!-- TEXT -->
   <div class="footer-text">te esperamos!!</div>
 
 </div>
 
-<!-- MUSIC (solo aquí) -->
+<!-- MUSIC -->
 <div class="music-controls" id="musicControls">
   <button id="playPauseBtn" class="music-btn" onclick="toggleMusic()">Play</button>
   <button class="music-btn" onclick="restartMusic()">Restart</button>
@@ -193,7 +187,7 @@ function openInvite() {
   document.getElementById("home").classList.add("hidden");
   document.getElementById("invitation").classList.remove("hidden");
 
-  document.getElementById("musicControls").style.display = "flex"; // 👈 ahora sí aparecen
+  document.getElementById("musicControls").style.display = "flex";
 
   if (!started) {
     music.currentTime = 47;
@@ -204,25 +198,24 @@ function openInvite() {
   btn.textContent = "Pause";
 
   startStars();
+}
+
+/* 🖨️ PRINT (TICKET + INFO TOGETHER) */
+function printTicket() {
+  document.getElementById("ticket").style.display = "block";
+  document.getElementById("address").classList.remove("hidden");
+  document.getElementById("countdown").classList.remove("hidden");
+
   startCountdown();
 }
 
-/* SHOW TICKET + BUTTON */
-function showTicket() {
-  document.getElementById("ticket").style.display = "block";
-  document.getElementById("address").classList.remove("hidden");
-}
-
-/* STARS */
+/* ⭐ STARS */
 function createStar() {
   const star = document.createElement("div");
   star.className = "star";
-
   star.style.left = Math.random() * window.innerWidth + "px";
   star.style.top = "0px";
-
   document.body.appendChild(star);
-
   setTimeout(() => star.remove(), 2500);
 }
 
@@ -230,7 +223,7 @@ function startStars() {
   setInterval(createStar, 160);
 }
 
-/* COUNTDOWN */
+/* ⏳ COUNTDOWN */
 function startCountdown() {
   const target = new Date("May 30, 2026 00:00:00").getTime();
 
@@ -238,13 +231,13 @@ function startCountdown() {
     const now = new Date().getTime();
     const diff = target - now;
 
-    const days = Math.floor(diff / 86400000);
-    const hours = Math.floor((diff % 86400000) / 3600000);
-    const mins = Math.floor((diff % 3600000) / 60000);
-    const secs = Math.floor((diff % 60000) / 1000);
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
 
     document.getElementById("countdown").innerHTML =
-      `${days}d ${hours}h ${mins}m ${secs}s`;
+      `${d}d ${h}h ${m}m ${s}s`;
 
   }, 1000);
 }
