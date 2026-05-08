@@ -166,7 +166,7 @@ body {
   <div class="countdown hidden" id="countdown"></div>
 
   <!-- TEXT -->
-  <div class="footer-text">THANKS!!</div>
+<div class="footer-text hidden" id="footerText">THANKS!!</div>
 
 </div>
 
@@ -205,6 +205,7 @@ function printTicket() {
   document.getElementById("ticket").style.display = "block";
   document.getElementById("address").classList.remove("hidden");
   document.getElementById("countdown").classList.remove("hidden");
+  document.getElementById("footerText").classList.remove("hidden");
 
   startCountdown();
 }
