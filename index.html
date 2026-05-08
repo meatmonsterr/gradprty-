@@ -1,1 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Invitation</title>
 
+<style>
+@import url(https://db.onlinewebfonts.com/c/0930b33e3b23483beec8d94d6eb3073d?family=F1589_Humane_Bordeaux+W00+Normal);
+</style>
+
+<style>
+
+body {
+  margin: 0;
+  background: black;
+  overflow: hidden;
+}
+
+/* PANTALLAS */
+.screen {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.hidden { display: none; }
+
+/* 📩 ENVELOPE */
+.envelope {
+  width: 650px;
+  cursor: pointer;
+}
+
+.small-text {
+  position: absolute;
+  bottom: 60px;
+  color: white;
+  font-family: "F1589_Humane_Bordeaux W00 Normal";
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+/* 🎴 INVITATION */
+.card-img {
+  width: 850px;
+  margin-bottom: 20px;
+}
+
+/* 🖼️ CLICK IMAGE (PRINTER) */
+.printer-img {
+  width: 400px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: transform 0.2s ease;
+}
+.printer-img:active {
+  transform: scale(0.95);
+}
+
+/* 🎟️ TICKET */
+.ticket {
+  width: 450px;
+  margin-top: 20px;
+  display: none;
+}
+
+/* BUTTON */
+.button {
+  padding: 12px 30px;
+  border-radius: 30px;
+  background: white;
+  color: black;
+  text-decoration: none;
+  font-size: 18px;
+  font-family: "F1589_Humane_Bordeaux W00 Normal";
+  margin-top: 25px;
+  transition: 0.3s;
+}
+
+.button:hover {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+/* MUSIC */
+.music-controls {
+  position: fixed;
+  bottom: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+.music-btn {
+  padding: 16px 30px;
+  border-radius: 30px;
+  font-size: 20px;
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  font-family: "F1589_Humane_Bordeaux W00 Normal";
+  cursor: pointer;
+}
+
+/* COUNTDOWN */
+.countdown {
+  margin-top: 25px;
+  color: white;
+  font-size: 28px;
+  font-family: "F1589_Humane_Bordeaux W00 Normal";
+}
+
+/* TEXTO FINAL */
+.footer-text {
+  margin-top: 20px;
+  color: white;
+  font-size: 22px;
+  font-family: "F1589_Humane_Bordeaux W00 Normal";
+}
+
+/* ⭐ STARS */
+.star {
+  position: fixed;
+  width: 25px;
+  height: 25px;
+  background: #C8B273;
+  clip-path: polygon(
+    50% 0%, 61% 35%, 98% 35%, 68% 57%,
+    79% 91%, 50% 70%, 21% 91%, 32% 57%,
+    2% 35%, 39% 35%
+  );
+  animation: fall 2.5s linear forwards;
+  opacity: 0.9;
+  z-index: 1;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) scale(0);
+    opacity: 0;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 AUDIO -->
+<audio id="music" src="ribslorse.m4a" loop></audio>
+
+<!-- 📩 HOME -->
+<div id="home" class="screen">
+  <img src="Untitled1419_20260507174102.png" class="envelope" onclick="openInvite()">
+  <div class="small-text">tap to open</div>
+</div>
+
+<!-- 🎴 INVITATION -->
+<div id="invitation" class="screen hidden">
+
+  <!-- carta abierta -->
+  <img src="Untitled1420_20260507175041.png" class="card-img">
+
+  <!-- printer image -->
+  <img src="Untitled1427_20260507180932.png" class="printer-img" onclick="showTicket()">
+
+  <!-- ticket -->
+  <img src="Untitled1426_20260507181354.png" class="ticket" id="ticket">
+
+  <!-- address -->
+  <a class="button" href="https://maps.app.goo.gl/vbqbLUkQrp8ppB4K6?g_st=ic" target="_blank">
+    Address
+  </a>
+
+  <!-- countdown -->
+  <div class="countdown" id="countdown"></div>
+
+  <!-- final text -->
+  <div class="footer-text">te esperamos!!</div>
+
+</div>
+
+<!-- 🎵 CONTROLES -->
+<div class="music-controls">
+  <button id="playPauseBtn" class="music-btn" onclick="toggleMusic()">Play</button>
+  <button class="music-btn" onclick="restartMusic()">Restart</button>
+</div>
+
+<script>
+
+const music = document.getElementById("music");
+const btn = document.getElementById("playPauseBtn");
+let started = false;
+let starsInterval;
+
+/* 🎴 OPEN INVITATION */
+function openInvite() {
+  document.getElementById("home").classList.add("hidden");
+  document.getElementById("invitation").classList.remove("hidden");
+
+  if (!started) {
+    music.currentTime = 47;
+    started = true;
+  }
+
+  music.play().catch(()=>{});
+  btn.textContent = "Pause";
+
+  startStars();
+  startCountdown();
+}
+
+/* 🎟️ SHOW TICKET */
+function showTicket() {
+  document.getElementById("ticket").style.display = "block";
+}
+
+/* ⭐ STARS ONLY AFTER OPEN */
+function createStar() {
+  const star = document.createElement("div");
+  star.className = "star";
+
+  star.style.left = Math.random() * window.innerWidth + "px";
+  star.style.top = "0px";
+
+  document.body.appendChild(star);
+
+  setTimeout(() => star.remove(), 2500);
+}
+
+function startStars() {
+  starsInterval = setInterval(createStar, 160);
+}
+
+/* ⏳ COUNTDOWN */
+function startCountdown() {
+  const target = new Date("May 30, 2026 00:00:00").getTime();
+
+  const interval = setInterval(() => {
+    const now = new Date().getTime();
+    const diff = target - now;
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / 3600000);
+    const mins = Math.floor((diff % 3600000) / 60000);
+    const secs = Math.floor((diff % 60000) / 1000);
+
+    document.getElementById("countdown").innerHTML =
+      `${days}d ${hours}h ${mins}m ${secs}s`;
+
+    if (diff < 0) {
+      clearInterval(interval);
+      document.getElementById("countdown").innerHTML = "0d 0h 0m 0s";
+    }
+  }, 1000);
+}
+
+/* 🎵 MUSIC */
+function toggleMusic() {
+  if (music.paused) {
+    music.play();
+    btn.textContent = "Pause";
+  } else {
+    music.pause();
+    btn.textContent = "Play";
+  }
+}
+
+function restartMusic() {
+  music.currentTime = 47;
+  music.play();
+  btn.textContent = "Pause";
+}
+
+</script>
+
+</body>
+</html>
